@@ -24,7 +24,7 @@ scalar/
 
 ```sh
 mkdir scalar && cd scalar
-for r in ui sdk api web website docs; do git clone git@github.com:scalar-app/$r.git; done
+for r in ui sdk integrations api worker web website docs; do git clone git@github.com:scalar-app/$r.git; done
 ```
 
 ## Infrastructure
@@ -53,13 +53,16 @@ cp .env.example .env
 Build the shared packages first, then the API, then the app.
 
 ```sh
-cd ui  && pnpm install && pnpm build
-cd ../sdk && pnpm install && pnpm build
-cd ../api && pnpm install && pnpm db:migrate && pnpm dev
-cd ../web && pnpm install && pnpm dev
+cd ui           && pnpm install && pnpm build
+cd ../sdk          && pnpm install && pnpm build
+cd ../integrations && pnpm install && pnpm build
+cd ../api          && pnpm install && pnpm db:migrate && pnpm dev
+cd ../worker       && pnpm install && pnpm dev
+cd ../web          && pnpm install && pnpm dev
 ```
 
 - `api` listens on `http://localhost:4000`.
+- `worker` needs `REDIS_URL`, `API_URL` and the same `INTERNAL_API_TOKEN` as the API. Without it, integrations connect but never sync.
 - `web` runs on `http://localhost:3000` and calls `api` from the browser with cookies. `web/next.config.ts` points Turbopack at the parent folder so the linked `ui` and `sdk` packages resolve.
 - Sign in: enter any email on the login page. In development the API returns the verify link and the page shows it. Email delivery is not implemented.
 

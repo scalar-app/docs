@@ -1,6 +1,6 @@
 # OAuth and token handling
 
-Status: planned. There are no integrations in Stage 1, so none of this code exists yet. It is written down now so the first integration is built to it.
+Status: implemented for Google Calendar. Tokens are encrypted at rest with AES-256-GCM (`TOKEN_ENCRYPTION_KEY`, 32 bytes, base64), the ciphertext is versioned (`v1.<iv>.<tag>.<data>`) so keys and algorithms can rotate, and only the API's credential service ever decrypts them. The worker receives short lived access tokens over an authenticated internal endpoint and never sees a refresh token.
 
 ## Storage
 

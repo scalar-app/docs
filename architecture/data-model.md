@@ -32,7 +32,7 @@ Everything else below is planned and does not exist in a migration yet. Column l
 | `spaces` | implemented | `id`, `workspace_id`, `name`, `description`, `color`, `icon`, `created_by`, `archived_at`, `created_at`, `updated_at`. A course, project or area |
 | `tasks` | implemented | See task shape below |
 | `task_dependencies` | planned | `task_id`, `depends_on_task_id` |
-| `events` | implemented (table only) | `id`, `workspace_id`, `title`, `description`, `starts_at`, `ends_at`, `all_day`, `location`, `source`, `source_object_id`, `source_url`, `created_at`, `updated_at`. Read-only in Stage 1; populated by integrations later |
+| `events` | implemented | `id`, `workspace_id`, `title`, `description`, `starts_at`, `ends_at`, `all_day`, `location`, `source`, `integration_account_id`, `source_object_id`, `source_url`, `source_updated_at`, `last_synced_at`, `created_at`, `updated_at`. Written by integration sync; unique on `(integration_account_id, source_object_id)` so upserts are idempotent |
 | `inbox_items` | planned | Untriaged items (emails, announcements) with provenance |
 | `notifications` | planned | In-app notifications |
 
@@ -40,9 +40,9 @@ Everything else below is planned and does not exist in a migration yet. Column l
 
 | Table | Status | Purpose |
 | --- | --- | --- |
-| `integration_accounts` | planned | One row per connected external account: `provider`, `external_account_id`, `display_name`, `status` |
-| `integration_tokens` | planned | Encrypted access and refresh tokens, expiry, scopes. See [security/oauth-and-tokens.md](../security/oauth-and-tokens.md) |
-| `integration_sync_state` | planned | Per-account cursor and health. See [sync.md](sync.md) |
+| `integration_accounts` | implemented | One row per connected external account: `workspace_id`, `user_id`, `provider`, `external_account_id`, `display_name`, `status` (`active`, `reauthorization_required`, `disconnected`), `settings`, `connected_at`, `disconnected_at`. Unique on `(workspace_id, provider, external_account_id)` |
+| `integration_tokens` | implemented | One row per account: AES-256-GCM ciphertext for the access and refresh tokens, expiry, scopes. Read only by the credential service. See [security/oauth-and-tokens.md](../security/oauth-and-tokens.md) |
+| `integration_sync_state` | implemented | One row per synced resource (a calendar): `sync_cursor`, `sync_status`, `last_successful_sync_at`, `last_attempt_at`, `last_error`, `next_sync_at`. See [sync.md](sync.md) |
 | `sources` | planned | Logical source inside an account, for example one Google calendar or one Canvas course |
 | `source_objects` | planned | Raw imported objects keyed by provider id, kept for reconciliation and re-derivation |
 

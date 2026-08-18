@@ -1,6 +1,6 @@
 # Events
 
-Read-only in Stage 1. The `events` table exists; nothing populates it until calendar sync is implemented. Native event creation is planned.
+Read only over HTTP. Events are written by integration sync (Google Calendar today) through the internal endpoints the worker uses. Creating events directly in Scalar is planned.
 
 ## Event shape
 
@@ -22,7 +22,7 @@ Read-only in Stage 1. The `events` table exists; nothing populates it until cale
 }
 ```
 
-`source` is a provider string: `google`, `canvas`, or `scalar` for events created natively.
+`source` is a provider string: `google_calendar` today, `scalar` for events created natively later.
 
 ## GET /api/v1/events?from=&to=
 

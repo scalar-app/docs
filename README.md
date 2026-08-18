@@ -23,11 +23,11 @@ Plain Markdown. There is no static site generator yet; one can be added later wi
 
 ## Status
 
-Scalar is at Stage 1. Many pages describe planned behaviour. Each page states what is implemented and what is not. When a page says "planned", the code does not exist yet.
+Scalar is at Stage 2: the repositories above exist and Google Calendar sync works end to end. Many pages still describe planned behaviour. Each page states what is implemented and what is not. When a page says "planned", the code does not exist yet.
 
 ## How the repositories fit together
 
-Scalar is not a monorepo. Each concern is its own repository under the `scalar-app` organization: `.github`, `docs` (this repo), `ui`, `sdk`, `api`, `web`, `website`, and later `worker`, `ai`, `mobile`, `desktop`, `infra`. See [architecture/repositories.md](architecture/repositories.md).
+Scalar is not a monorepo. Each concern is its own repository under the `scalar-app` organization: `.github`, `docs` (this repo), `ui`, `sdk`, `api`, `web`, `website`, `integrations`, `worker`, and later `ai`, `mobile`, `desktop`, `infra`. See [architecture/repositories.md](architecture/repositories.md).
 
 ## Contributing docs
 

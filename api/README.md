@@ -12,6 +12,8 @@ The `@scalar/sdk` package mirrors this contract; see [../sdk/README.md](../sdk/R
 - [v1/spaces.md](v1/spaces.md)
 - [v1/events.md](v1/events.md)
 - [v1/today.md](v1/today.md)
+- [v1/integrations.md](v1/integrations.md)
+- [v1/integrations.md](v1/integrations.md)
 
 ## Stage 1 endpoint list
 

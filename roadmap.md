@@ -2,22 +2,28 @@
 
 Dates are not promised. Order is.
 
-## Stage 1 (current)
+## Stage 1 (done)
 
 - Repositories: `.github`, `docs`, `ui`, `sdk`, `api`, `web`, `website`.
 - Magic link auth with real sessions (email delivery not implemented).
-- Personal workspace, spaces, tasks, read-only events, Today.
+- Personal workspace, spaces, tasks, events, Today.
 - Design tokens and first components in `ui`.
+- Command palette (⌘K) with navigation and quick task capture.
 
-## MVP
+## Stage 2 (current)
 
-Milestone 1: create an account, connect Google, sync the calendar, create a task, see it on Today, ask "What do I have tomorrow?".
+- Repositories added: `integrations`, `worker`.
+- Google Calendar: OAuth with encrypted tokens, calendar discovery, incremental sync with `syncToken`, manual sync, disconnect with a keep or delete choice.
+- `worker`: BullMQ consumer, retries with backoff, reconciliation scheduler.
+- Integration settings in `web`; synced events visible in Today and Calendar.
 
-- Google Calendar integration (read).
-- `worker` with cursor-based sync, retries, dead-letter.
-- Command palette (⌘K).
-- First AI command over read tools, through the provider abstraction.
+Milestone 1 is met except for the AI answer: create an account, connect Google, sync the calendar, create a task, see both on Today.
+
+## Next
+
+- First AI command over read tools, through the provider abstraction ("What do I have tomorrow?").
 - Email delivery for magic links.
+- Gmail and Canvas integrations.
 
 ## Phase two
 

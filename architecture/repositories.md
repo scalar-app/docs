@@ -18,12 +18,12 @@ Scalar is split into one git repository per concern under the `scalar-app` GitHu
 
 | Repo | Purpose |
 | --- | --- |
-| `worker` | Background jobs: sync, notifications, dead-letter handling |
+| `worker` | Background jobs: integration sync and the reconciliation scheduler. No database access; talks to the API's internal endpoints |
 | `ai` | Provider abstraction, tools, evaluation datasets |
 | `mobile` | Mobile client |
 | `desktop` | Tauri desktop shell around the web app |
 | `infra` | Deployment manifests |
-| `integrations` | Provider adapters (may live inside `worker` initially) |
+| `integrations` | Provider code (OAuth, sync, normalization). Pure TypeScript, used by both `api` and `worker` |
 
 ## Package linking before npm publish
 
