@@ -1,0 +1,14 @@
+{
+  "config": {
+    "default": true,
+    // Line length is not enforced; prose wraps naturally.
+    "MD013": false,
+    // Allow inline HTML for the occasional table cell.
+    "MD033": false,
+    // Multiple headings with the same text are fine across sections.
+    "MD024": { "siblings_only": true },
+    // First line does not have to be a heading (LICENSE and similar).
+    "MD041": false
+  },
+  "ignores": ["node_modules/**", "LICENSE"]
+}
