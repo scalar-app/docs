@@ -143,6 +143,8 @@ One thread with its messages, each carrying the actions it proposed.
 
 `404` if the thread does not exist or belongs to another workspace or person.
 
+Actions come back with the status they were left in, which is what makes history useful rather than decorative: a proposal left `pending` can still be approved from a reopened conversation, and one already `executed` is shown as done instead of being offered again.
+
 ## What is stored
 
 Message rows record the text, model, stop reason, token counts, and which tools ran with their classification and whether they succeeded. Tool output is not stored, so an AI message never becomes a second copy of your tasks and calendar.
