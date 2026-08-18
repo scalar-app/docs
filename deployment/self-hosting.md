@@ -1,6 +1,6 @@
 # Self-hosting
 
-Scalar is AGPL-3.0 and designed to be run by anyone. There is no Scalar Cloud yet. When one exists it will run the same code as a self-hosted deployment; there is no separate cloud edition.
+Scalar is AGPL-3.0 and designed to be run by anyone. There is no hosted Scalar and none is planned: running it yourself is the only way to use it, and the only way it is meant to be used. See [what-it-costs.md](what-it-costs.md).
 
 ## Components
 
@@ -8,9 +8,9 @@ Scalar is AGPL-3.0 and designed to be run by anyone. There is no Scalar Cloud ye
 | --- | --- | --- |
 | `api` | HTTP API, migrations, sessions | required |
 | `web` | Next.js app served to browsers | required for the UI |
-| `worker` | Background jobs, sync, dead-letter | planned |
+| `worker` | Background jobs, calendar sync, dead-letter | required for sync |
 | PostgreSQL | Primary datastore | required |
-| Redis | Queue and cache | started by compose; unused by Stage 1 `api` |
+| Redis | Queue, cache, rate limits | required |
 | S3-compatible storage (MinIO locally) | Files and attachments | started by compose; unused by Stage 1 `api` |
 | `website` | Public marketing site | optional, static |
 
@@ -28,6 +28,7 @@ Magic link email is not implemented. A self-hosted Stage 1 deployment can only s
 - `worker` runs alongside `api`, sharing `DATABASE_URL` and a Redis URL.
 - Integrations need your own OAuth clients (Google Cloud project, Canvas developer key or personal tokens) configured via environment variables.
 - `TOKEN_ENCRYPTION_KEY` for integration tokens; back it up, since losing it means every user must reconnect.
+- `ANTHROPIC_API_KEY` if you want Ask. Without it the API starts normally and Command returns 503; nothing else changes. The key is yours and is billed to your own account. `AI_DAILY_MESSAGE_LIMIT` caps messages per person per day.
 - S3-compatible storage for attachments.
 
 ## Reference files

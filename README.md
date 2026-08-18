@@ -16,18 +16,20 @@ Plain Markdown. There is no static site generator yet; one can be added later wi
 | `integrations/` | Provider integrations (Google, Canvas) and the integration interface |
 | `development/` | Local setup, coding standards, testing |
 | `security/` | OAuth token handling, secrets, prompt injection |
-| `deployment/` | Self-hosting |
+| `deployment/` | Self-hosting, and what running Scalar costs |
 | `contributing/` | How to contribute across repos |
 | `adr/` | Architecture decision records |
 | `roadmap.md` | MVP and later phases |
 
 ## Status
 
-Scalar is at Stage 2: the repositories above exist and Google Calendar sync works end to end. Many pages still describe planned behaviour. Each page states what is implemented and what is not. When a page says "planned", the code does not exist yet.
+Scalar is at Stage 2: Google Calendar sync works end to end, and Scalar Command answers questions from your own data and proposes changes you approve. Many pages still describe planned behaviour. Each page states what is implemented and what is not. When a page says "planned", the code does not exist yet.
+
+There is no hosted Scalar and none is planned. You run it yourself; see [deployment/what-it-costs.md](deployment/what-it-costs.md).
 
 ## How the repositories fit together
 
-Scalar is not a monorepo. Each concern is its own repository under the `scalar-app` organization: `.github`, `docs` (this repo), `ui`, `sdk`, `api`, `web`, `website`, `integrations`, `worker`, and later `ai`, `mobile`, `desktop`, `infra`. See [architecture/repositories.md](architecture/repositories.md).
+Scalar is not a monorepo. Each concern is its own repository under the `scalar-app` organization: `.github`, `docs` (this repo), `ui`, `sdk`, `api`, `web`, `website`, `integrations`, `worker`, `ai`, and later `mobile`, `desktop`, `infra`. See [architecture/repositories.md](architecture/repositories.md).
 
 ## Contributing docs
 

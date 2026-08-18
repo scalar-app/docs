@@ -14,7 +14,7 @@ Clone `sdk` as a sibling of the consuming repo and run `pnpm build` in it first.
 
 ## What it provides
 
-- Types for every Stage 1 resource: `User`, `Workspace`, `Space`, `Task`, `Event`, `TodayResponse`, `TaskStatus`, `TaskPriority`, `Paginated<T>`, `ApiError`.
+- Types for every resource: `User`, `Workspace`, `Space`, `Task`, `Event`, `TodayResponse`, `IntegrationAccount`, `CommandResponse`, `CommandAction`, `TaskStatus`, `TaskPriority`, `Paginated<T>`, `ApiError`.
 - A client with one method per endpoint, taking typed params and returning typed results.
 - Error handling: non-2xx responses throw an error carrying `code`, `message`, `status` and `requestId` from the `{ error }` body and `x-request-id` header.
 - Cookie-based auth: the client sends credentials with every request. It does not manage tokens.
@@ -40,3 +40,20 @@ const today = await scalar.today.get({ date: '2026-08-18', tz: 'Europe/Berlin' }
 ## Versioning
 
 Until publication, the SDK tracks `api` main. After publication it will follow semver, with breaking API changes producing a major bump.
+
+## Command
+
+```ts
+const turn = await scalar.command.ask({ message: 'what is due this week?' });
+
+if (turn.stopReason === 'needs_approval') {
+  for (const proposal of turn.actions) {
+    // proposal.summary is written for a person. Show it, then decide.
+    await scalar.command.approve(proposal.id);
+  }
+}
+```
+
+`ask` never changes anything: it answers, and returns pending actions. `approve` is the only call that makes a change. On a server without a model key these throw `ScalarApiError` with status 503 and code `AI_UNAVAILABLE`.
+
+See [../api/v1/command.md](../api/v1/command.md).
