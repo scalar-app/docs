@@ -20,8 +20,7 @@ Scalar is split into one git repository per concern under the `scalar-app` GitHu
 | --- | --- |
 | `worker` | Background jobs: integration sync and the reconciliation scheduler. No database access; talks to the API's internal endpoints |
 | `ai` | Provider abstraction, tools, evaluation datasets |
-| `mobile` | Mobile client |
-| `desktop` | Tauri desktop shell around the web app |
+| `desktop` | Tauri 2 shell around the web app: macOS, Windows, Linux, iOS and Android |
 | `infra` | Deployment manifests |
 | `integrations` | Provider code (OAuth, sync, normalization). Pure TypeScript, used by both `api` and `worker` |
 
