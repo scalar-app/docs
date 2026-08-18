@@ -46,6 +46,10 @@ Each repo that reads environment variables ships `.env.example`. Copy it and fil
 cp .env.example .env
 ```
 
+On Windows that is `copy .env.example .env` in PowerShell, or the same `cp` in Git Bash.
+
+`api` and `worker` load `.env` themselves in development, through Node's built in `--env-file-if-exists`. Nothing loads a file in production: pass real environment variables there, which is what the Dockerfiles and any host expect.
+
 `api`: `DATABASE_URL`, `REDIS_URL`, `APP_ORIGIN` (the web app origin, `http://localhost:3000`), `COOKIE_SECRET` (32+ characters), `PORT` (4000). `web`: `NEXT_PUBLIC_API_URL` (`http://localhost:4000`) in `.env.local`. Each repo's `.env.example` is authoritative. Never commit `.env` files.
 
 ## Run order
