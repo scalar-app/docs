@@ -13,6 +13,7 @@ The `@scalar/sdk` package mirrors this contract; see [../sdk/README.md](../sdk/R
 - [v1/events.md](v1/events.md)
 - [v1/today.md](v1/today.md)
 - [v1/integrations.md](v1/integrations.md)
+- [v1/search.md](v1/search.md)
 - [v1/command.md](v1/command.md)
 
 ## Endpoint list
@@ -31,6 +32,7 @@ The `@scalar/sdk` package mirrors this contract; see [../sdk/README.md](../sdk/R
 | GET, PATCH, DELETE | `/api/v1/tasks/:id` |
 | GET | `/api/v1/events?from=&to=` |
 | GET | `/api/v1/today?date=&tz=` |
+| GET | `/api/v1/search?q=&limit=` |
 | GET | `/api/v1/integrations` |
 | POST | `/api/v1/integrations/google/connect` |
 | POST | `/api/v1/integrations/:id/sync` |
@@ -47,6 +49,6 @@ Everything except `/health`, `POST /auth/magic-link` and `GET /auth/magic-link/v
 
 - Email delivery for magic links (dev logs the link).
 - Any write endpoint for events. Calendar entries arrive through sync.
-- Inbox, notifications, search.
+- Notifications. The inbox is `GET /api/v1/tasks?status=inbox` rather than its own endpoint.
 
 Command endpoints require `ANTHROPIC_API_KEY` on the server. Without it they return `503 AI_UNAVAILABLE` and everything else works normally.
