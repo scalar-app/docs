@@ -27,7 +27,7 @@ Behaviour:
 - Creates a `magic_link_tokens` row holding the SHA-256 hash of a random token. The plain token is never stored.
 - The link points at `${APP_ORIGIN}/auth/verify?token=...` and expires after `MAGIC_LINK_TTL_MINUTES` (default 15).
 - Rate limited in Redis: 5 requests per email and 20 per IP in a 15 minute window. Over the limit returns `429 RATE_LIMITED`.
-- Email delivery is not implemented. Outside production the link is logged and returned as `devLink`. In production the request succeeds, nothing is sent, and a warning is logged.
+- Email delivery uses SMTP when configured. Outside production the link is logged and returned as `devLink`. In production the request succeeds, nothing is sent, and a warning is logged.
 
 ## GET /api/v1/auth/magic-link/verify?token=
 

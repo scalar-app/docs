@@ -22,7 +22,6 @@ Milestone 1 is met except for the AI answer: create an account, connect Google, 
 ## Next
 
 - First AI command over read tools, through the provider abstraction ("What do I have tomorrow?").
-- Email delivery for magic links.
 - Gmail and Canvas integrations.
 
 ## Phase two

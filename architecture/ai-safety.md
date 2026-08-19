@@ -95,7 +95,7 @@ interface ScalarModelProvider {
 
 ## Running without a model
 
-`ANTHROPIC_API_KEY` is optional. Without it the API starts normally, Command returns 503 `AI_UNAVAILABLE`, and every other part of Scalar works. A half working AI feature is worse than a visibly absent one.
+A model provider is optional. Without one the API starts normally, Command returns 503 `AI_UNAVAILABLE`, and every other part of Scalar works. A half working AI feature is worse than a visibly absent one.
 
 ## Evaluation datasets
 
@@ -106,3 +106,7 @@ Not built yet. Prompt and tool changes will be checked against versioned dataset
 - [security/prompt-injection.md](../security/prompt-injection.md)
 - [authorization.md](authorization.md)
 - [deployment/what-it-costs.md](../deployment/what-it-costs.md)
+
+## Which provider
+
+Every safeguard on this page is enforced by Scalar rather than by the model, so it holds whichever vendor an installation uses, including a local one. See [deployment/ai-providers.md](../deployment/ai-providers.md).

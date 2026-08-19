@@ -1,6 +1,6 @@
 # Integrations
 
-Status: planned. No integration code exists in Stage 1. This section defines what will be built and the rules it must follow.
+Two providers are implemented: Google Calendar (OAuth, events) and Canvas (personal access token, coursework). Both go through the same contract, which lives in `integrations/src/contract.ts`.
 
 ## Providers by phase
 
@@ -13,24 +13,44 @@ Status: planned. No integration code exists in Stage 1. This section defines wha
 
 See [google.md](google.md) and [canvas.md](canvas.md).
 
-## The ScalarIntegration interface
+## The ScalarIntegration contract
 
-Every provider adapter implements one interface so the worker can drive them uniformly:
+Every provider implements one interface, so the worker never names a provider to do its job:
 
 ```ts
 interface ScalarIntegration {
-  readonly provider: string;                     // 'google', 'canvas'
-  readonly scopes: readonly string[];            // minimum scopes needed
-  authorize(input: AuthorizeInput): Promise<AuthorizeResult>;   // OAuth start / token exchange, or PAT validation
-  refresh(tokens: StoredTokens): Promise<StoredTokens>;
-  revoke(tokens: StoredTokens): Promise<void>;
-  listSources(ctx: IntegrationContext): Promise<Source[]>;      // calendars, courses
-  sync(ctx: IntegrationContext, source: Source, cursor: string | null): Promise<SyncResult>;
-  // SyncResult: { objects: SourceObject[]; deletedIds: string[]; nextCursor: string | null; rateLimit?: RateLimitInfo }
+  readonly id: ProviderId;
+  readonly name: string;
+  readonly auth: 'oauth2' | 'token';
+  readonly capabilities: readonly IntegrationCapability[];
+  readonly itemKinds: readonly ('event' | 'task')[];
+
+  identify(input): Promise<{ externalAccountId: string; displayName: string | null }>;
+  discover(input): Promise<IntegrationResource[]>;
+  sync(context: SyncContext): Promise<SyncResult>;
 }
 ```
 
-Adapters return raw `SourceObject`s. Mapping into tasks, events and inbox items happens in shared code, so provenance and dedup rules are applied once.
+The contract was generalized against two genuinely different providers rather than in the abstract. Generalising against Google alone would have produced something shaped exactly like Google: OAuth, calendars, sync tokens. Canvas has none of those, which is what makes it a useful second case.
+
+What the contract deliberately does not assume: OAuth, calendars, that a provider can write, or that a provider has a cursor.
+
+### Capabilities
+
+`read_calendar`, `write_calendar`, `read_coursework`, `read_email`, `write_email`.
+
+Providers declare what they can do and callers check. Neither implemented provider declares a write capability today: writing to someone's real calendar or sending mail on their behalf is a separate decision with its own approval story, and an absent capability is more honest than one declared and unimplemented.
+
+### Normalized items
+
+A sync returns `NormalizedEvent` (goes to `events`) or `NormalizedTask` (goes to `tasks`, with `status = inbox`). Both carry mandatory provenance so a synced row is traceable and a repeated sync updates rather than duplicates.
+
+A `NormalizedTask` may carry `suggestedMinutes`, `suggestedPriority` and `suggestionReason`. Those are what the source *believes*, and they travel to the [inbox](../api/v1/inbox.md) as a suggestion a person accepts or turns down. They are never written straight onto a task.
+
+### Adding a provider
+
+A file in `integrations/src/<provider>/`, a line in `integrations/src/registry.ts`, and a value in the `integration_provider` enum. The worker and the API need no changes.
+
 
 ## Rules
 

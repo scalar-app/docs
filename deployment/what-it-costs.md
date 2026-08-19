@@ -31,7 +31,7 @@ If you already have a machine that stays on, Scalar costs nothing to run.
 
 Everything in Scalar works without a model key: tasks, calendar, Today, spaces, sync, search over your own data. Ask is the one feature that talks to a language model, and it uses **your** key, billed to **your** Anthropic account.
 
-Set `ANTHROPIC_API_KEY` on the API to turn it on. Leave it unset and the API starts normally, `/api/v1/command` returns 503 `AI_UNAVAILABLE`, and the Ask page explains that the feature is not set up on this server. Nothing else is affected. This is why Ask is a page you can ignore rather than a thing woven through every screen.
+Set `AI_PROVIDER` on the API to turn it on, pointing at a hosted vendor or at a local model that costs nothing to run. Leave it unset and the API starts normally, `/api/v1/command` returns 503 `AI_UNAVAILABLE`, and the Ask page explains that the feature is not set up on this server. Nothing else is affected. This is why Ask is a page you can ignore rather than a thing woven through every screen.
 
 Two settings keep that bill predictable:
 

@@ -68,7 +68,7 @@ cd ../web          && pnpm install && pnpm dev
 - `api` listens on `http://localhost:4000`.
 - `worker` needs `REDIS_URL`, `API_URL` and the same `INTERNAL_API_TOKEN` as the API. Without it, integrations connect but never sync.
 - `web` runs on `http://localhost:3000` and calls `api` from the browser with cookies. `web/next.config.ts` points Turbopack at the parent folder so the linked `ui` and `sdk` packages resolve.
-- Sign in: enter any email on the login page. In development the API returns the verify link and the page shows it. Email delivery is not implemented.
+- Sign in: enter any email on the login page. Without `SMTP_HOST` set, the API returns the verify link and the page shows it, which is the normal way to work locally. With SMTP configured the link is emailed and never returned.
 
 `website` is independent: `cd website && pnpm install && pnpm dev`.
 

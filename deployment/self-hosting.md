@@ -1,5 +1,20 @@
 # Self-hosting
 
+## The short version
+
+```bash
+git clone https://github.com/scalar-app/infra
+cd infra
+sh scripts/up.sh
+```
+
+That clones what is missing, generates secrets into a `.env`, builds and starts everything, and waits until the API answers. Run it again any time; it will not overwrite an existing `.env`.
+
+Then set `SMTP_HOST` in `.env` so people can sign in, and restart. Without mail the API returns the sign in link in its response, which is fine on a machine only you can reach and refused in production unless you set `ALLOW_LINK_WITHOUT_EMAIL=true`.
+
+See also: [backups.md](backups.md), [upgrading.md](upgrading.md), [troubleshooting.md](troubleshooting.md), [ai-providers.md](ai-providers.md).
+
+
 Scalar is AGPL-3.0 and designed to be run by anyone. There is no hosted Scalar and none is planned: running it yourself is the only way to use it, and the only way it is meant to be used. See [what-it-costs.md](what-it-costs.md).
 
 ## Components
@@ -28,7 +43,7 @@ Magic link email is not implemented. A self-hosted Stage 1 deployment can only s
 - `worker` runs alongside `api`, sharing `DATABASE_URL` and a Redis URL.
 - Integrations need your own OAuth clients (Google Cloud project, Canvas developer key or personal tokens) configured via environment variables.
 - `TOKEN_ENCRYPTION_KEY` for integration tokens; back it up, since losing it means every user must reconnect.
-- `ANTHROPIC_API_KEY` if you want Ask. Without it the API starts normally and Command returns 503; nothing else changes. The key is yours and is billed to your own account. `AI_DAILY_MESSAGE_LIMIT` caps messages per person per day.
+- `AI_PROVIDER` (with `AI_API_KEY`, or `AI_BASE_URL` for a local model) if you want Ask. Without it the API starts normally and Command returns 503; nothing else changes. The key is yours and is billed to your own account, or there is no key at all if you run a local model. `AI_DAILY_MESSAGE_LIMIT` caps messages per person per day. See [ai-providers.md](ai-providers.md).
 - S3-compatible storage for attachments.
 
 ## Reference files
