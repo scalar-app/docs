@@ -8,7 +8,7 @@
 ## Baseline (Stage 1)
 
 - Sessions: server-side, opaque cookie `scalar_session`, `HttpOnly`, `SameSite=Lax`, `Secure` in production.
-- Magic link tokens: stored hashed, single use, expiring. Email delivery is not implemented; dev logs the link.
+- Magic link tokens: stored hashed, single use, expiring. Delivered over SMTP when configured; without it the link is returned in the response, which production refuses unless `ALLOW_LINK_WITHOUT_EMAIL=true`.
 - Authorization in the service layer, scoped by workspace membership. See [../architecture/authorization.md](../architecture/authorization.md).
 - Input validated with zod at every HTTP boundary.
 - Every response carries `x-request-id`; logs are keyed by it.

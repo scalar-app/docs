@@ -10,6 +10,8 @@ Stage 1 defines these tables in `api`:
 
 `users`, `sessions`, `magic_link_tokens`, `workspaces`, `workspace_members`, `spaces`, `tasks`, `events`.
 
+The V2 foundation migration (`0003_v2_foundation`) adds `projects` and `user_preferences`, and gives `tasks` a `project_id` plus the same provenance columns `events` already had. It is additive: no table is dropped and no column is repurposed.
+
 Everything else below is planned and does not exist in a migration yet. Column lists are a design target; the Drizzle schema in `api` is the source of truth for exact column names and types.
 
 ## Core tables
@@ -30,10 +32,14 @@ Everything else below is planned and does not exist in a migration yet. Column l
 | Table | Status | Purpose |
 | --- | --- | --- |
 | `spaces` | implemented | `id`, `workspace_id`, `name`, `description`, `color`, `icon`, `created_by`, `archived_at`, `created_at`, `updated_at`. A course, project or area |
-| `tasks` | implemented | See task shape below |
+| `projects` | implemented | `id`, `workspace_id`, `space_id`, `name`, `description`, `status` (`active`, `paused`, `completed`, `archived`), `start_at`, `due_at`, `created_by`, plus provenance (`source`, `integration_account_id`, `source_object_id`, `source_url`, `last_synced_at`) unique on `(integration_account_id, source_object_id)`. A body of work inside a Space, or the mirror of something on a provider such as a Canvas course. Deleting a Space clears `space_id` rather than cascading |
+| `tasks` | implemented | See task shape below. Carries `project_id` and provenance (`source`, `integration_account_id`, `source_object_id`, `source_url`, `source_updated_at`, `last_synced_at`), unique on `(integration_account_id, source_object_id)` so repeated syncs are idempotent. `source_id` is the superseded V1 column, kept until a later release drops it |
+| `user_preferences` | implemented | One row per person: `time_zone`, `week_starts_on`, `workday_start_minute`, `workday_end_minute`, `work_days`, `default_focus_minutes`, `minimum_buffer_minutes`, `auto_schedule`, `duration_learning_enabled`. The planner's inputs. Personal rather than workspace scoped |
 | `task_dependencies` | planned | `task_id`, `depends_on_task_id` |
 | `events` | implemented | `id`, `workspace_id`, `title`, `description`, `starts_at`, `ends_at`, `all_day`, `location`, `source`, `integration_account_id`, `source_object_id`, `source_url`, `source_updated_at`, `last_synced_at`, `created_at`, `updated_at`. Written by integration sync; unique on `(integration_account_id, source_object_id)` so upserts are idempotent |
-| `inbox_items` | planned | Untriaged items (emails, announcements) with provenance |
+| `focus_sessions` | implemented | `id`, `workspace_id`, `user_id`, `task_id`, `status`, `planned_minutes`, `started_at`, `ended_at`, `actual_minutes`, `notes`. Scoped to the person, not the workspace. A partial unique index on `user_id where status = 'active'` makes "one thing at a time" a database rule rather than a convention |
+| `timeline_blocks` | planned | Blocks that exist in their own right (focus, personal, buffer). The day's sequence is a read model over `events` and scheduled `tasks` today, so nothing is stored twice |
+| `task_suggestions` | implemented | A proposed patch to an inbox item: `workspace_id`, `task_id`, `status` (`pending`, `accepted`, `edited`, `dismissed`), `origin`, `source`, `suggestion` (JSON), `reason`, `decided_at`. Advisory only; nothing is applied until a person accepts it. There is no `inbox_items` table: an unfiled task is a task with `status = 'inbox'` |
 | `notifications` | planned | In-app notifications |
 
 ### Integrations and provenance

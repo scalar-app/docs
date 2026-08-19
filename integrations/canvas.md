@@ -1,50 +1,57 @@
-# Canvas LMS
+# Canvas
 
-Status: planned (Phase two). Nothing is implemented.
+Coursework from Canvas LMS: courses become resources, assignments arrive in your inbox with what Canvas believes about them attached as a suggestion.
 
-## What the Canvas REST API provides
+Read only. Scalar does not submit work.
 
-Canvas exposes a REST API that, for a student token, realistically gives Scalar:
+## Why a token rather than OAuth
 
-| Resource | Endpoint family | What Scalar does with it |
-| --- | --- | --- |
-| Courses | `/api/v1/courses` (enrolled, active) | One Space per course |
-| Assignments | `/api/v1/courses/:id/assignments` | One task per assignment, `dueAt` from `due_at`, `sourceUrl` from `html_url` |
-| Submissions | `/api/v1/courses/:id/students/submissions` | Mark task done when submitted, show grade if present |
-| Announcements | `/api/v1/announcements?context_codes[]=course_:id` | Inbox items |
-| Modules and items | `/api/v1/courses/:id/modules` | Optional: structure inside a Space |
-| Calendar events | `/api/v1/calendar_events` | Course events with dates |
-| Planner | `/api/v1/planner/items` | Cross-course "what is due" list, useful as a cheap incremental feed |
+Canvas OAuth requires a developer key, and only an institution's Canvas administrator can issue one. A student cannot get one, and a self hoster should not have to email their university to use their own assignments.
 
-Things Canvas does not give reliably, and Scalar will not promise:
+So Canvas connects with a **personal access token**, which anyone can generate for themselves:
 
-- Push notifications. There are no webhooks for student tokens; Scalar polls.
-- A single change cursor. Canvas has no global sync token. Incremental sync uses per-course listing with `updated_since` style filters where they exist, plus periodic full listing for reconciliation. See [../architecture/sync.md](../architecture/sync.md).
-- Consistent due dates. Assignments can have overrides per section; `due_at` may be null. Scalar takes the effective due date when the API returns it and otherwise leaves `dueAt` null.
-- Grades for everything. Some courses hide grades; Scalar shows what the API returns and nothing else.
-- Files beyond metadata. Downloading course files is out of scope initially.
+1. In Canvas: **Account**, then **Settings**.
+2. Under Approved Integrations, **+ New access token**. Give it a purpose and leave the expiry blank, or set one and expect to reconnect.
+3. Copy the token: Canvas shows it once.
+4. In Scalar: **Settings**, then **Integrations**, then Canvas. Enter your institution's Canvas address and the token.
 
-Institutions can restrict or disable API access. When that happens Scalar shows the provider error and does not guess.
+The token is verified against Canvas before anything is stored, so a typo fails immediately with a message about the token rather than as a mysterious sync error later. It is then encrypted at rest with your server's `TOKEN_ENCRYPTION_KEY`, and no endpoint ever returns it.
 
-## Authentication
-
-Two token types, chosen by deployment:
-
-- Canvas developer key (OAuth2). Requires an admin at the institution to create a developer key for Scalar. Suitable for a hosted deployment serving many users at one school. Tokens are refreshable.
-- Personal access token. Any Canvas user can generate one under Account, Settings, "New Access Token". Suitable for self-hosters and for development. Not refreshable; the user pastes it and can revoke it in Canvas.
-
-Both are stored encrypted in `integration_tokens` and never shown again after entry. The user also supplies the Canvas base URL (`https://school.instructure.com`), since every institution has its own.
-
-## Rate limits
-
-Canvas applies per-token throttling with `X-Rate-Limit-Remaining` and a cost model. The adapter reads these headers and sets `next_sync_at` accordingly. Pagination is via `Link` headers.
-
-## Mapping summary
+## What syncs
 
 | Canvas | Scalar |
 | --- | --- |
-| course | space (`source_provider = canvas`) |
-| assignment | task, status `todo`, `dueAt = due_at` |
-| submitted submission | task status `done`, `completedAt = submitted_at` |
-| announcement | inbox item |
-| calendar event | event (`source = canvas`) |
+| Active course | A **Project**, and a sync resource |
+| Published assignment | A task in your **inbox**, with `dueAt`, a link back, and a plain-text description |
+| Points possible | A *suggested* duration and priority, with the reasoning |
+
+A course becomes a project keyed by Canvas's own course id, so it is the same project on every sync and a course that gets renamed in Canvas is renamed in Scalar rather than duplicated. Assignments are filed into it when they first arrive.
+
+What the provider owns is the name. **Everything else about the project is yours**: which Space it sits in, its status, its dates. A sync never touches those, and it never moves an assignment you have re-filed somewhere else. Once you put a course into a Space, work that arrives later is filed into that Space too.
+
+Concluded courses and unpublished assignments are skipped. On a first sync, coursework due more than 30 days ago is skipped as history; after that an assignment Scalar already knows about keeps updating even once its deadline passes.
+
+## What Scalar decides and what you decide
+
+The provider says what exists and when it is due. **It does not get to say what matters.**
+
+An imported assignment lands with `status = inbox`, no priority and no estimate. What Canvas believes about size travels separately as an inbox [suggestion](../api/v1/inbox.md):
+
+> Homework 4 — Worth 60 points in Canvas.
+> Suggested: 2 hr, high priority. **Accept** / **Not this**
+
+Points are a weak signal: a 100 point final and a 100 point participation grade are not the same afternoon. So it is advice with its reasoning attached, and you can change it before accepting.
+
+## Repeated syncs
+
+Every assignment carries a stable `sourceObjectId` (`course:<id>:assignment:<id>`), and tasks are unique on `(integration_account_id, source_object_id)`. Syncing twice updates one task rather than creating two.
+
+A sync refreshes what the provider owns — title, description, due date, link — and **never touches what you own**: status, priority, estimate, space, project and schedule. Someone who decided an assignment is urgent and blocked out Thursday for it does not lose that because Canvas edited a description. A suggestion is attached once, when the task first appears, so advice you have turned down does not come back.
+
+Canvas does not report deletions, so an assignment that disappears from Canvas stays in Scalar. Delete it yourself if you want it gone.
+
+## Limits
+
+- Canvas has no sync cursor, so each run fetches the course's assignments and compares. That is affordable for tens of assignments per course and honest: pretending to be incremental against an API that is not would silently miss edits.
+- Announcements, submissions, grades and calendar events are not imported.
+- One token, one Canvas. Two institutions means two accounts.

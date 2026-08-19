@@ -16,7 +16,7 @@ Plain Markdown. There is no static site generator yet; one can be added later wi
 | `integrations/` | Provider integrations (Google, Canvas) and the integration interface |
 | `development/` | Local setup, coding standards, testing |
 | `security/` | OAuth token handling, secrets, prompt injection |
-| `deployment/` | Self-hosting, and what running Scalar costs |
+| `deployment/` | Self-hosting, AI providers, backups, upgrading, troubleshooting |
 | `contributing/` | How to contribute across repos |
 | `adr/` | Architecture decision records |
 | `roadmap.md` | MVP and later phases |

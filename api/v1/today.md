@@ -1,3 +1,5 @@
+> **Superseded by [home.md](home.md).** Today still works and nothing calls for its removal yet, but the web app now reads `/api/v1/home`, which answers the same question with reasons attached.
+
 # Today
 
 `GET /api/v1/today?date=YYYY-MM-DD&tz=` returns a deterministic view of one day. No AI is involved; the same inputs always give the same output.
