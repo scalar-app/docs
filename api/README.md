@@ -71,7 +71,6 @@ Everything except `/health`, `POST /auth/magic-link` and `GET /auth/magic-link/v
 
 ## Not implemented
 
-
 - Any write endpoint for events. Calendar entries arrive through sync.
 - Notifications.
 

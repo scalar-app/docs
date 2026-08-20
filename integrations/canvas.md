@@ -37,7 +37,7 @@ The provider says what exists and when it is due. **It does not get to say what 
 
 An imported assignment lands with `status = inbox`, no priority and no estimate. What Canvas believes about size travels separately as an inbox [suggestion](../api/v1/inbox.md):
 
-> Homework 4 — Worth 60 points in Canvas.
+> Homework 4: worth 60 points in Canvas.
 > Suggested: 2 hr, high priority. **Accept** / **Not this**
 
 Points are a weak signal: a 100 point final and a 100 point participation grade are not the same afternoon. So it is advice with its reasoning attached, and you can change it before accepting.
@@ -46,7 +46,7 @@ Points are a weak signal: a 100 point final and a 100 point participation grade 
 
 Every assignment carries a stable `sourceObjectId` (`course:<id>:assignment:<id>`), and tasks are unique on `(integration_account_id, source_object_id)`. Syncing twice updates one task rather than creating two.
 
-A sync refreshes what the provider owns — title, description, due date, link — and **never touches what you own**: status, priority, estimate, space, project and schedule. Someone who decided an assignment is urgent and blocked out Thursday for it does not lose that because Canvas edited a description. A suggestion is attached once, when the task first appears, so advice you have turned down does not come back.
+A sync refreshes what the provider owns (title, description, due date, link) and **never touches what you own**: status, priority, estimate, space, project and schedule. Someone who decided an assignment is urgent and blocked out Thursday for it does not lose that because Canvas edited a description. A suggestion is attached once, when the task first appears, so advice you have turned down does not come back.
 
 Canvas does not report deletions, so an assignment that disappears from Canvas stays in Scalar. Delete it yourself if you want it gone.
 

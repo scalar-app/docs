@@ -20,7 +20,7 @@ Start at **Settings, then Diagnostics**. It reports each component with a senten
 
 ## Ask Scalar is unavailable
 
-**503 `AI_UNAVAILABLE`.** No provider configured, or the configuration was rejected at boot. The API logs say which variable is missing. See [ai-providers.md](ai-providers.md). Everything except Ask keeps working — that is deliberate, not a partial outage.
+**503 `AI_UNAVAILABLE`.** No provider configured, or the configuration was rejected at boot. The API logs say which variable is missing. See [ai-providers.md](ai-providers.md). Everything except Ask keeps working. That is deliberate, not a partial outage.
 
 **"Could not reach the model provider."** For a local model, the server is not running or `AI_BASE_URL` is wrong. From inside compose, a sibling container is `http://ollama:11434`, not `localhost`.
 
@@ -41,4 +41,4 @@ docker compose logs -f api
 docker compose logs -f worker
 ```
 
-`LOG_LEVEL=debug` on the API for more. Logs redact cookies, tokens and passwords, so they are safe to read and to paste when asking for help — check anyway before pasting.
+`LOG_LEVEL=debug` on the API for more. Logs redact cookies, tokens and passwords, so they are safe to read and to paste when asking for help. Check anyway before pasting.
