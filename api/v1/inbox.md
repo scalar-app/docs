@@ -57,7 +57,7 @@ Errors: `404 NOT_FOUND`, `422 SPACE_NOT_IN_WORKSPACE`, `422 PROJECT_NOT_IN_WORKS
 
 Turns down the proposal. **The item stays in the inbox** and is unchanged: the decision was about the advice, not the work. A dismissed stored suggestion is not offered again.
 
-To get rid of the work itself, cancel the task through `PATCH /api/v1/tasks/:id` — which marks it cancelled rather than deleting it, so nothing is lost.
+To get rid of the work itself, cancel the task through `PATCH /api/v1/tasks/:id`, which marks it cancelled rather than deleting it, so nothing is lost.
 
 ## Writing suggestions
 

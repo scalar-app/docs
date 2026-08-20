@@ -7,7 +7,7 @@ sh scripts/clone.sh          # picks up any new repository
 docker compose -f docker-compose.yml -f compose.apps.yml up -d --build
 ```
 
-The API applies pending migrations on boot. **Take a backup first** ([backups.md](backups.md)) — that is the whole rollback plan, and it takes a minute.
+The API applies pending migrations on boot. **Take a backup first** ([backups.md](backups.md)). That is the whole rollback plan, and it takes a minute.
 
 ## Check it worked
 

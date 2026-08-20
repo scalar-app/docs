@@ -14,7 +14,6 @@ Then set `SMTP_HOST` in `.env` so people can sign in, and restart. Without mail 
 
 See also: [backups.md](backups.md), [upgrading.md](upgrading.md), [troubleshooting.md](troubleshooting.md), [ai-providers.md](ai-providers.md).
 
-
 Scalar is AGPL-3.0 and designed to be run by anyone. There is no hosted Scalar and none is planned: running it yourself is the only way to use it, and the only way it is meant to be used. See [what-it-costs.md](what-it-costs.md).
 
 ## Components

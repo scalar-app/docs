@@ -41,7 +41,7 @@ Query: `date` (YYYY-MM-DD, defaults to today in `tz`), `tz` (defaults to `UTC`; 
 Checked in order, first match wins:
 
 1. **A running focus session.** The brief puts a current calendar event first; Scalar puts the session first, because a session is a decision the person made a moment ago while an event is an inference from a calendar. When someone has said "this is what I am doing", Scalar should not argue.
-2. **Whatever is happening now** — a block whose start has passed and whose end has not.
+2. **Whatever is happening now**: a block whose start has passed and whose end has not.
 3. **The next scheduled task**, ahead of a later event: work someone planned is work they meant to do next.
 4. **The next event.**
 5. **The most pressing task with no time yet**, ordered by deadline then priority then id.

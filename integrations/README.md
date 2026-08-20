@@ -51,7 +51,6 @@ A `NormalizedTask` may carry `suggestedMinutes`, `suggestedPriority` and `sugges
 
 A file in `integrations/src/<provider>/`, a line in `integrations/src/registry.ts`, and a value in the `integration_provider` enum. The worker and the API need no changes.
 
-
 ## Rules
 
 - Minimum scopes. Request only what the current feature uses. Calendar read does not request calendar write. Adding a scope is a product decision and a re-consent for the user.
