@@ -20,6 +20,7 @@ Plain Markdown. There is no static site generator yet; one can be added later wi
 | `contributing/` | How to contribute across repos |
 | `adr/` | Architecture decision records |
 | `roadmap.md` | MVP and later phases |
+| `V2_ARCHITECTURE.md` | Audit of the architecture as of 2026-08-19, and the proposed V2 shape |
 
 ## Status
 
@@ -29,7 +30,7 @@ There is no hosted Scalar and none is planned. You run it yourself; see [deploym
 
 ## How the repositories fit together
 
-Scalar is not a monorepo. Each concern is its own repository under the `scalar-app` organization: `.github`, `docs` (this repo), `ui`, `sdk`, `api`, `web`, `website`, `integrations`, `worker`, `ai`, and later `mobile`, `desktop`, `infra`. See [architecture/repositories.md](architecture/repositories.md).
+Scalar is not a monorepo. Each concern is its own repository under the `scalar-app` organization: `.github`, `docs` (this repo), `ui`, `sdk`, `api`, `web`, `website`, `integrations`, `worker`, `ai`, `desktop`, `infra`, and later `mobile`. See [architecture/repositories.md](architecture/repositories.md).
 
 ## Contributing docs
 
